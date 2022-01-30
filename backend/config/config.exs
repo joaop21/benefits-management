@@ -13,7 +13,9 @@ config :benefits,
 # Configures the endpoint
 config :benefits, BenefitsWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "Gtt8Mv0NUFPsSQbCDXFmgnIbg47HDp6aHof5EipI1aR34+6pU8Xx5pXqhfdt7rKC",
+  secret_key_base:
+    System.get_env("SECRET_KEY_BASE") ||
+      "Gtt8Mv0NUFPsSQbCDXFmgnIbg47HDp6aHof5EipI1aR34+6pU8Xx5pXqhfdt7rKC",
   render_errors: [view: BenefitsWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: Benefits.PubSub,
   live_view: [signing_salt: "1dfqHYXH"]

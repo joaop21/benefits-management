@@ -1,19 +1,27 @@
 # Benefits API - Backend
 
-To start your Phoenix server:
+Backend API for a Benefits system that can be used by company employees to self-manage their benefits.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
+# Usage
+
+Start by creating your own `.env` file and fill the credentials that you can see in the `.env.sample` file. You shoud uncomment and fill the variables that you will need. Then just need to run `source .env`.
+
+## Development environment
+
+To start your Phoenix server in a dev environment:
+
+  * Install dependencies, create and migrate your database with `mix setup`
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Production environment
 
-## Learn more
+## Test environment
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+To run the app's tests:
+
+  * Install dependencies, create and migrate your database with `mix setup`
+  * Run the tests with `mix test`
+
+# Documentation

@@ -1,10 +1,19 @@
 defmodule Benefits.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
-  @moduledoc false
+  @moduledoc """
+  This module implements the Application behaviour by defining the start/2 function.
+  This way, this module can be used in the mix.exs, specifically in the application/0 function,
+  so it can be invoked in the application startup.
+  """
 
   use Application
 
+  @doc """
+  Called when an application is started.
+  Starts the app's main supervisor with its children and arguments,
+  as well as the supervision strategy, in this case a :one_for_one strategy.
+  """
+  @spec start(Application.start_type(), start_args :: term()) ::
+          {:ok, pid()} | {:ok, pid(), Application.state()} | {:error, reason :: term()}
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
@@ -15,12 +24,8 @@ defmodule Benefits.Application do
       {Phoenix.PubSub, name: Benefits.PubSub},
       # Start the Endpoint (http/https)
       BenefitsWeb.Endpoint
-      # Start a worker by calling: Benefits.Worker.start_link(arg)
-      # {Benefits.Worker, arg}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Benefits.Supervisor]
     Supervisor.start_link(children, opts)
   end

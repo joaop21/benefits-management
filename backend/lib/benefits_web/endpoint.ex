@@ -10,10 +10,6 @@ defmodule BenefitsWeb.Endpoint do
     signing_salt: "lL4Ehnes"
   ]
 
-  socket "/socket", BenefitsWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.

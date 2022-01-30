@@ -1,6 +1,18 @@
 defmodule Benefits.MixProject do
+  @moduledoc """
+  Module that configures the current Mix project.
+  The module exports a project/0 function that returns a keyword list representing the project's configuration and
+  defines an application/0 function for configuring the generated application that also returns a keyword list which
+  represents the app's configuration.
+  """
+
   use Mix.Project
 
+  @doc """
+  This function is exported by the Mix.Project behaviour and configures this project by returning a keyword list
+  containing the project's configuration.
+  """
+  @spec project() :: keyword(any())
   def project do
     [
       app: :benefits,
@@ -14,9 +26,12 @@ defmodule Benefits.MixProject do
     ]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
+  @doc """
+  Configures the OTP application.
+  Configures the generated application (.app file) by defining a keyword list of configurations.
+  Run "mix help compile.app" to learn about applications.
+  """
+  @spec application() :: keyword(any())
   def application do
     [
       mod: {Benefits.Application, []},
@@ -25,12 +40,13 @@ defmodule Benefits.MixProject do
   end
 
   # Specifies which paths to compile per environment.
+  @spec elixirc_paths(:dev | :prod | :test) :: list(String.t())
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  # Specifies your project dependencies.
-  #
-  # Type `mix help deps` for examples and options.
+  # This function defines the dependencies of the project.
+  # Run "mix help deps" to learn about dependencies.
+  @spec deps() :: list(tuple())
   defp deps do
     [
       {:phoenix, "~> 1.5.9"},
@@ -45,12 +61,9 @@ defmodule Benefits.MixProject do
     ]
   end
 
+  # This function defines aliases for the project.
   # Aliases are shortcuts or tasks specific to the current project.
-  # For example, to install project dependencies and perform other setup tasks, run:
-  #
-  #     $ mix setup
-  #
-  # See the documentation for `Mix` for more info on aliases.
+  @spec aliases() :: keyword(list(String.t()))
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],

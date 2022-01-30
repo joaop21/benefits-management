@@ -1,4 +1,4 @@
-# Benefits
+# Benefits API - Backend
 
 To start your Phoenix server:
 

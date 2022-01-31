@@ -7,6 +7,8 @@ defmodule BenefitsWeb.Router do
 
   scope "/api", BenefitsWeb do
     pipe_through :api
+
+    resources "/users", UserController, only: [:show, :create]
   end
 
   # Enables LiveDashboard only for development

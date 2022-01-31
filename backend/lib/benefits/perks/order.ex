@@ -4,6 +4,8 @@ defmodule Benefits.Perks.Order do
 
   alias Benefits.Accounts.User
 
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
+
   schema "orders" do
     field :total, :float
 
@@ -17,5 +19,10 @@ defmodule Benefits.Perks.Order do
     order
     |> cast(attrs, [:user_id, :total])
     |> validate_required([:user_id, :total])
+    |> foreign_key_constraint(:user_id)
+    |> check_constraint(:total,
+      name: :total_must_be_non_negative,
+      message: "Total must be non-negative"
+    )
   end
 end

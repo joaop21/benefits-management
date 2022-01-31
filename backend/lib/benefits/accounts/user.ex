@@ -2,7 +2,7 @@ defmodule Benefits.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Benefits.Perks.Order
+  alias Benefits.Perks.{Order, Product}
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
 
@@ -11,6 +11,7 @@ defmodule Benefits.Accounts.User do
     field :balance, :float, default: 0.00
 
     has_many :orders, Order
+    many_to_many :products, Product, join_through: "users_products"
 
     timestamps()
   end

@@ -38,4 +38,24 @@ defmodule Benefits.Perks do
     |> Product.changeset(attrs)
     |> Repo.insert()
   end
+
+  alias Benefits.Perks.Order
+
+  @doc """
+  Creates a order.
+
+  ## Examples
+
+      iex> create_order(%{field: value})
+      {:ok, %Order{}}
+
+      iex> create_order(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_order(attrs \\ %{}) do
+    %Order{}
+    |> Order.changeset(attrs)
+    |> Repo.insert()
+  end
 end

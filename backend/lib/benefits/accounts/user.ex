@@ -17,6 +17,9 @@ defmodule Benefits.Accounts.User do
     |> cast(attrs, [:user_id, :balance])
     |> validate_required([:user_id])
     |> unique_constraint(:user_id)
-    |> check_constraint(:balance, name: :balance_must_be_positive, message: "Balance must be positive")
+    |> check_constraint(:balance,
+      name: :balance_must_be_positive,
+      message: "Balance must be positive"
+    )
   end
 end

@@ -13,6 +13,5 @@ defmodule Benefits.Repo.Migrations.CreateUsers do
 
     create unique_index(:users, [:user_id])
     create constraint(:users, :balance_must_be_positive, check: "balance >= 0.00")
-
   end
 end

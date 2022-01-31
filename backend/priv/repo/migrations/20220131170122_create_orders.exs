@@ -2,7 +2,7 @@ defmodule Benefits.Repo.Migrations.CreateOrders do
   use Ecto.Migration
 
   def change do
-    create table(:orders) do
+    create table(:orders, primary_key: false) do
       add :id, :uuid, primary_key: true, null: false
 
       add :total, :float, default: 0.00

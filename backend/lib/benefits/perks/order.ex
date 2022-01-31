@@ -10,7 +10,7 @@ defmodule Benefits.Perks.Order do
   schema "orders" do
     field :total, :float
 
-    belongs_to :user, User
+    belongs_to :user, User, foreign_key: :user_id, type: :binary_id
     many_to_many :products, Product, join_through: "orders_products"
 
     timestamps()

@@ -3,6 +3,7 @@ defmodule Benefits.Perks.Product do
   import Ecto.Changeset
 
   alias Benefits.Accounts.User
+  alias Benefits.Perks.Order
 
   schema "products" do
     field :identifier, :string
@@ -10,6 +11,7 @@ defmodule Benefits.Perks.Product do
     field :price, :float, default: 0.00
 
     many_to_many :users, User, join_through: "users_products"
+    many_to_many :orders, Order, join_through: "orders_products"
 
     timestamps()
   end

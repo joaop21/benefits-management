@@ -3,6 +3,7 @@ defmodule Benefits.Perks.Order do
   import Ecto.Changeset
 
   alias Benefits.Accounts.User
+  alias Benefits.Perks.Product
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
 
@@ -10,6 +11,7 @@ defmodule Benefits.Perks.Order do
     field :total, :float
 
     belongs_to :user, User
+    many_to_many :products, Product, join_through: "orders_products"
 
     timestamps()
   end

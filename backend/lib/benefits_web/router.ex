@@ -13,7 +13,7 @@ defmodule BenefitsWeb.Router do
     post "/users", UserController, :create
     # Products
     get "/products", ProductController, :index
-    #Orders
+    # Orders
     post "/orders", OrderController, :create
   end
 

@@ -22,6 +22,25 @@ defmodule Benefits.Perks do
   end
 
   @doc """
+  Given a list of identifiers, returns the
+  products that match those list.
+
+  ## Examples
+
+      iex> list_products_by_identifiers(["product1",..])
+      [%Product{}, ...]
+
+  """
+  def list_products_by_identifiers(identifiers) when is_list(identifiers) do
+    Product
+    |> where([p], p.identifier in ^identifiers)
+    |> Repo.all()
+    |> (&{:ok, &1}).()
+  end
+
+  def list_products_by_identifiers(_identifiers), do: {:error, "Argument isn't a list"}
+
+  @doc """
   Creates a product.
 
   ## Examples
@@ -53,9 +72,15 @@ defmodule Benefits.Perks do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_order(attrs \\ %{}) do
+  def create_order(products_identifiers, user_id) do
     %Order{}
-    |> Order.changeset(attrs)
+    #|> Order.changeset(attrs)
     |> Repo.insert()
+
+    #with identifiers = Enum.uniq(products_identifiers),
+    #     {:ok, products} <- list_products_by_identifiers(identifiers),
+
+    #do
+    #end
   end
 end

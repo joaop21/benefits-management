@@ -6,8 +6,8 @@ defmodule BenefitsWeb.OrderController do
 
   action_fallback BenefitsWeb.FallbackController
 
-  def create(conn, %{"order" => order_params}) do
-    with {:ok, %Order{} = order} <- Perks.create_order(order_params) do
+  def create(conn, %{"order" => %{"items" => identifiers, "user_id" => user_id}}) do
+    with {:ok, %Order{} = order} <- Perks.create_order(identifiers, user_id) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.order_path(conn, :show, order))

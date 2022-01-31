@@ -74,13 +74,13 @@ defmodule Benefits.Perks do
   """
   def create_order(products_identifiers, user_id) do
     %Order{}
-    #|> Order.changeset(attrs)
+    # |> Order.changeset(attrs)
     |> Repo.insert()
 
-    #with identifiers = Enum.uniq(products_identifiers),
+    # with identifiers = Enum.uniq(products_identifiers),
     #     {:ok, products} <- list_products_by_identifiers(identifiers),
 
-    #do
-    #end
+    # do
+    # end
   end
 end

@@ -13,6 +13,7 @@ defmodule Benefits.Repo.Migrations.CreateOrderLines do
     end
 
     create unique_index(:order_lines, [:user_id, :order_id, :product_id], name: :unique_line_index)
+
     create unique_index(:order_lines, [:user_id, :product_id], name: :one_product_per_user_index)
   end
 end

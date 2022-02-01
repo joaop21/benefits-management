@@ -70,6 +70,9 @@ defmodule Benefits.PerksTest do
   describe "orders" do
     alias Benefits.Accounts
 
+    @not_found {:error, "products_not_found"}
+    @inexistent_user {:error, "Inexistent User"}
+
     setup do
       # create 3 products
       Perks.create_product(%{identifier: "product1", name: "Product1", price: 120.5})
@@ -84,20 +87,16 @@ defmodule Benefits.PerksTest do
     end
 
     test "create_order/2 with invalid identifier list returns '{:error, 'products_not_found'}" do
-      assert Perks.create_order("inexistent1", "user1") == {:error, "products_not_found"}
-      assert Perks.create_order([], "user1") == {:error, "products_not_found"}
-      assert Perks.create_order(["inexistent1"], "user1") == {:error, "products_not_found"}
-
-      assert Perks.create_order(["inexistent1", "inexistent2"], "user1") ==
-               {:error, "products_not_found"}
-
-      assert Perks.create_order(["product1", "inexistent1"], "user1") ==
-               {:error, "products_not_found"}
+      assert Perks.create_order("inexistent1", "user1") == @not_found
+      assert Perks.create_order([], "user1") == @not_found
+      assert Perks.create_order(["inexistent1"], "user1") == @not_found
+      assert Perks.create_order(["inexistent1", "inexistent2"], "user1") == @not_found
+      assert Perks.create_order(["product1", "inexistent1"], "user1") == @not_found
     end
 
     test "create_order/2 with invalid user returns '{:error, 'Inexistent User'}" do
-      assert Perks.create_order(["product1"], "inexistent") == {:error, "Inexistent User"}
-      assert Perks.create_order(["product1", "product2"], "user3") == {:error, "Inexistent User"}
+      assert Perks.create_order(["product1"], "inexistent") == @inexistent_user
+      assert Perks.create_order(["product1", "product2"], "user3") == @inexistent_user
     end
 
     test "create_order/2 with total price higher than user's balance returns '{:error, 'insufficient_balance'}" do

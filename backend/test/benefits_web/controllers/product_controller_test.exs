@@ -2,7 +2,6 @@ defmodule BenefitsWeb.ProductControllerTest do
   use BenefitsWeb.ConnCase
 
   alias Benefits.Perks
-  alias Benefits.Perks.Product
 
   def fixture(:product) do
     attrs = %{identifier: "product1", name: "Product1", price: 50.6}

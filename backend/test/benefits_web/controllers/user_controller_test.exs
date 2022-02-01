@@ -2,7 +2,6 @@ defmodule BenefitsWeb.UserControllerTest do
   use BenefitsWeb.ConnCase
 
   alias Benefits.Accounts
-  alias Benefits.Accounts.User
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

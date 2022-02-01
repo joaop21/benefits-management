@@ -22,7 +22,15 @@ defmodule Benefits.MixProject do
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Benefits",
+      source_url: "https://github.com/joaop21/benefits-management",
+      docs: [
+        main: "Benefits", # The main page in the docs
+        extras: ["README.md"]
+      ]
     ]
   end
 

@@ -1,6 +1,8 @@
 defmodule Benefits.Perks do
   @moduledoc """
   The Perks context.
+  It has accomodates the models that are related with Benefits
+  and the functions to interact with them.
   """
 
   import Ecto.Query, warn: false
@@ -19,6 +21,7 @@ defmodule Benefits.Perks do
       [%Product{}, ...]
 
   """
+  @spec list_products() :: list(Product.t())
   def list_products do
     Repo.all(Product)
   end
@@ -35,6 +38,7 @@ defmodule Benefits.Perks do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_product(map()) :: {:ok, Product.t()} | {:error, Ecto.Changeset.t()}
   def create_product(attrs \\ %{}) do
     %Product{}
     |> Product.changeset(attrs)
@@ -56,15 +60,18 @@ defmodule Benefits.Perks do
   def create_order(products_identifiers, user_id) do
     case create_order_transaction(products_identifiers, user_id) do
       {:ok, changeset} ->
-        {:ok, %{
-          order_id: changeset.order.id,
-          total: changeset.total,
-          items: changeset.identifiers
-        }}
+        {:ok,
+         %{
+           order_id: changeset.order.id,
+           total: changeset.total,
+           items: changeset.identifiers
+         }}
 
-      {:error, :products_existence, message, _changes} -> {:error, message}
+      {:error, :products_existence, message, _changes} ->
+        {:error, message}
 
-      {:error, :update_user, _changeset, _changes} -> {:error, "insufficient_balance"}
+      {:error, :update_user, _changeset, _changes} ->
+        {:error, "insufficient_balance"}
 
       {:error, _op, changeset, _changes} ->
         {:error, Keyword.get(changeset.errors, :user_id) |> elem(0)}

@@ -64,9 +64,10 @@ defmodule Benefits.Perks do
 
       {:error, :products_existence, message, _changes} -> {:error, message}
 
+      {:error, :update_user, _changeset, _changes} -> {:error, "insufficient_balance"}
+
       {:error, _op, changeset, _changes} ->
-        changeset
-        |> Ecto.Changeset.traverse_errors()
+        {:error, Keyword.get(changeset.errors, :user_id) |> elem(0)}
     end
   end
 
@@ -123,10 +124,11 @@ defmodule Benefits.Perks do
   end
 
   # Checks if the list of identifiers has the same size as the list of products
+  # Also checks if the list of identifiers is not empty
   @spec check_products_existence(list(String.t()), list(Product.t())) ::
           {:ok, true} | {:error, String.t()}
   defp check_products_existence(identifiers, products)
-       when length(identifiers) == length(products),
+       when length(identifiers) == length(products) and length(identifiers) > 0,
        do: {:ok, true}
 
   defp check_products_existence(_identifiers, _products), do: {:error, "products_not_found"}

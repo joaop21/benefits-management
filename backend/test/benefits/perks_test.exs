@@ -67,121 +67,65 @@ defmodule Benefits.PerksTest do
     end
   end
 
-  """
   describe "orders" do
-    alias Benefits.Perks.Order
+    alias Benefits.Accounts
 
-    @valid_attrs %{total: 120.5}
-    @update_attrs %{total: 456.7}
-    @invalid_attrs %{total: nil}
+    setup do
+      # create 3 products
+      Perks.create_product(%{identifier: "product1", name: "Product1", price: 120.5})
+      Perks.create_product(%{identifier: "product2", name: "Product2", price: 12.5})
+      Perks.create_product(%{identifier: "product3", name: "Product3", price: 1.5})
 
-    def order_fixture(attrs \\ %{}) do
-      {:ok, order} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Perks.create_order()
+      # create two user
+      Accounts.create_user(%{balance: 130.0, user_id: "user1"})
+      Accounts.create_user(%{balance: 150.0, user_id: "user2"})
 
-      order
+      :ok
     end
 
-    test "list_orders/0 returns all orders" do
-      order = order_fixture()
-      assert Perks.list_orders() == [order]
+    test "create_order/2 with invalid identifier list returns '{:error, 'products_not_found'}" do
+      assert Perks.create_order("inexistent1", "user1") == {:error, "products_not_found"}
+      assert Perks.create_order([], "user1") == {:error, "products_not_found"}
+      assert Perks.create_order(["inexistent1"], "user1") == {:error, "products_not_found"}
+
+      assert Perks.create_order(["inexistent1", "inexistent2"], "user1") ==
+               {:error, "products_not_found"}
+
+      assert Perks.create_order(["product1", "inexistent1"], "user1") ==
+               {:error, "products_not_found"}
     end
 
-    test "get_order!/1 returns the order with given id" do
-      order = order_fixture()
-      assert Perks.get_order!(order.id) == order
+    test "create_order/2 with invalid user returns '{:error, 'Inexistent User'}" do
+      assert Perks.create_order(["product1"], "inexistent") == {:error, "Inexistent User"}
+      assert Perks.create_order(["product1", "product2"], "user3") == {:error, "Inexistent User"}
     end
 
-    test "create_order/1 with valid data creates a order" do
-      assert {:ok, %Order{} = order} = Perks.create_order(@valid_attrs)
-      assert order.total == 120.5
+    test "create_order/2 with total price higher than user's balance returns '{:error, 'insufficient_balance'}" do
+      assert Perks.create_order(["product1", "product2"], "user1") == {:error, "insufficient_balance"}
     end
 
-    test "create_order/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Perks.create_order(@invalid_attrs)
+    test "create_order/2 with repeated products returns '{:error, 'products_already_purchased'}" do
+      Perks.create_order(["product2"], "user1")
+      assert Perks.create_order(["product2"], "user1") == {:error, "products_already_purchased"}
     end
 
-    test "update_order/2 with valid data updates the order" do
-      order = order_fixture()
-      assert {:ok, %Order{} = order} = Perks.update_order(order, @update_attrs)
-      assert order.total == 456.7
-    end
+    test "create_order/2 with valid data, creates an Order, an OrderLine and updates the user's balance" do
+      identifiers = ["product2", "product3"]
+      user_id = "user2"
 
-    test "update_order/2 with invalid data returns error changeset" do
-      order = order_fixture()
-      assert {:error, %Ecto.Changeset{}} = Perks.update_order(order, @invalid_attrs)
-      assert order == Perks.get_order!(order.id)
-    end
+      {:ok, %{
+        order_id: _order_id,
+        total: order_total,
+        items: order_items
+      }} = Perks.create_order(identifiers, user_id)
 
-    test "delete_order/1 deletes the order" do
-      order = order_fixture()
-      assert {:ok, %Order{}} = Perks.delete_order(order)
-      assert_raise Ecto.NoResultsError, fn -> Perks.get_order!(order.id) end
-    end
+      user = Accounts.get_user(user_id)
+      user_products = Enum.map(user.products, & &1.identifier)
 
-    test "change_order/1 returns a order changeset" do
-      order = order_fixture()
-      assert %Ecto.Changeset{} = Perks.change_order(order)
-    end
-  end
-
-  describe "order_lines" do
-    alias Benefits.Perks.OrderLine
-
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
-
-    def order_line_fixture(attrs \\ %{}) do
-      {:ok, order_line} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Perks.create_order_line()
-
-      order_line
-    end
-
-    test "list_order_lines/0 returns all order_lines" do
-      order_line = order_line_fixture()
-      assert Perks.list_order_lines() == [order_line]
-    end
-
-    test "get_order_line!/1 returns the order_line with given id" do
-      order_line = order_line_fixture()
-      assert Perks.get_order_line!(order_line.id) == order_line
-    end
-
-    test "create_order_line/1 with valid data creates a order_line" do
-      assert {:ok, %OrderLine{} = order_line} = Perks.create_order_line(@valid_attrs)
-    end
-
-    test "create_order_line/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Perks.create_order_line(@invalid_attrs)
-    end
-
-    test "update_order_line/2 with valid data updates the order_line" do
-      order_line = order_line_fixture()
-      assert {:ok, %OrderLine{} = order_line} = Perks.update_order_line(order_line, @update_attrs)
-    end
-
-    test "update_order_line/2 with invalid data returns error changeset" do
-      order_line = order_line_fixture()
-      assert {:error, %Ecto.Changeset{}} = Perks.update_order_line(order_line, @invalid_attrs)
-      assert order_line == Perks.get_order_line!(order_line.id)
-    end
-
-    test "delete_order_line/1 deletes the order_line" do
-      order_line = order_line_fixture()
-      assert {:ok, %OrderLine{}} = Perks.delete_order_line(order_line)
-      assert_raise Ecto.NoResultsError, fn -> Perks.get_order_line!(order_line.id) end
-    end
-
-    test "change_order_line/1 returns a order_line changeset" do
-      order_line = order_line_fixture()
-      assert %Ecto.Changeset{} = Perks.change_order_line(order_line)
+      assert order_total == (12.5 + 1.5)
+      assert user.balance == (150.0 - order_total)
+      assert identifiers == order_items
+      assert order_items == user_products
     end
   end
-  """
 end

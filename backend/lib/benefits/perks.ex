@@ -72,7 +72,7 @@ defmodule Benefits.Perks do
   end
 
   # Creates a transaction that updates correctly all the data entities
-  # with a transaction
+  # with a transaction built with the Multi structure
   @spec create_order_transaction(list(String.t()), String.t()) ::
           {:ok, any()}
           | {:error, any()}

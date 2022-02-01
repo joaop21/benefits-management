@@ -50,6 +50,7 @@ defmodule Benefits.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.4"},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.9"},
       {:phoenix_ecto, "~> 4.1"},

@@ -101,7 +101,8 @@ defmodule Benefits.PerksTest do
     end
 
     test "create_order/2 with total price higher than user's balance returns '{:error, 'insufficient_balance'}" do
-      assert Perks.create_order(["product1", "product2"], "user1") == {:error, "insufficient_balance"}
+      assert Perks.create_order(["product1", "product2"], "user1") ==
+               {:error, "insufficient_balance"}
     end
 
     test "create_order/2 with repeated products returns '{:error, 'products_already_purchased'}" do
@@ -113,17 +114,18 @@ defmodule Benefits.PerksTest do
       identifiers = ["product2", "product3"]
       user_id = "user2"
 
-      {:ok, %{
-        order_id: _order_id,
-        total: order_total,
-        items: order_items
-      }} = Perks.create_order(identifiers, user_id)
+      {:ok,
+       %{
+         order_id: _order_id,
+         total: order_total,
+         items: order_items
+       }} = Perks.create_order(identifiers, user_id)
 
       user = Accounts.get_user(user_id)
       user_products = Enum.map(user.products, & &1.identifier)
 
-      assert order_total == (12.5 + 1.5)
-      assert user.balance == (150.0 - order_total)
+      assert order_total == 12.5 + 1.5
+      assert user.balance == 150.0 - order_total
       assert identifiers == order_items
       assert order_items == user_products
     end

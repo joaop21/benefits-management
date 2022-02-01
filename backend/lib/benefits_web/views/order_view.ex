@@ -7,10 +7,14 @@ defmodule BenefitsWeb.OrderView do
   end
 
   def render("show.json", %{order: order}) do
-    %{data: render_one(order, OrderView, "order.json")}
+    %{order: render_one(order, OrderView, "order.json")}
   end
 
   def render("order.json", %{order: order}) do
-    %{id: order.id, total: order.total}
+    %{
+      order_id: order.order_id,
+      total: order.total,
+      items: order.items
+    }
   end
 end

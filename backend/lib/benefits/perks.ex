@@ -42,7 +42,7 @@ defmodule Benefits.Perks do
   end
 
   @doc """
-  Creates a order.
+  Creates an order.
 
   ## Examples
 
@@ -55,9 +55,18 @@ defmodule Benefits.Perks do
   """
   def create_order(products_identifiers, user_id) do
     case create_order_transaction(products_identifiers, user_id) do
-      {:ok, changeset} -> {:ok, changeset}
-      {:error, any} -> {:error, any}
-      {:error, _op, message, _changeset} -> {:error, message}
+      {:ok, changeset} ->
+        {:ok, %{
+          order_id: changeset.order.id,
+          total: changeset.total,
+          items: changeset.identifiers
+        }}
+
+      {:error, :products_existence, message, _changes} -> {:error, message}
+
+      {:error, _op, changeset, _changes} ->
+        changeset
+        |> Ecto.Changeset.traverse_errors()
     end
   end
 

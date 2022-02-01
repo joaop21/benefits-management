@@ -15,10 +15,10 @@ defmodule Benefits.Accounts do
 
   ## Examples
 
-      iex> get_user!("user1")
+      iex> get_user("user1")
       %User{}
 
-      iex> get_user!("inexistent")
+      iex> get_user("inexistent")
       nil
 
   """
